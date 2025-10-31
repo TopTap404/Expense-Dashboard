@@ -73,137 +73,160 @@ export default function Home() {
   const balance = income - expense;
 
   return (
-    <main style={{ maxWidth: 960, margin: "0 auto", padding: 24 }}>
-      <h1>Expense Dashboard</h1>
+  <main className="max-w-5xl mx-auto p-8 text-[var(--foreground)] bg-[var(--background)]">
+    <h1 className="text-3xl font-bold mb-6">Expense Dashboard</h1>
 
-      {/* Filter */}
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-        <div>
-          จาก:{" "}
-          <input
-            type="date"
-            value={filterFrom}
-            onChange={(e) => setFilterFrom(e.target.value)}
-          />
-        </div>
-        <div>
-          ถึง:{" "}
-          <input
-            type="date"
-            value={filterTo}
-            onChange={(e) => setFilterTo(e.target.value)}
-          />
-        </div>
-        <div>
-          หมวด:{" "}
-          <select
-            value={filterCat}
-            onChange={(e) => setFilterCat(e.target.value)}
-          >
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          ประเภท:{" "}
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-          >
-            <option value="all">ทั้งหมด</option>
-            <option value="income">รายรับ</option>
-            <option value="expense">รายจ่าย</option>
-          </select>
-        </div>
-        <button
-          onClick={() => {
-            setFilterFrom("");
-            setFilterTo("");
-            setFilterCat("all");
-            setFilterType("all");
-          }}
-        >
-          clear
-        </button>
-      </div>
-
-      {/* ตาราง */}
-      <table style={{ width: "100%", marginTop: 16 }}>
-        <thead>
-          <tr>
-            <th>วันที่</th>
-            <th>รายการ</th>
-            <th>ประเภท</th>
-            <th>หมวด</th>
-            <th style={{ textAlign: "right" }}>จำนวน</th>
-            <th>ลบ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filtered.map((it) => (
-            <tr key={it.id}>
-              <td>{it.date}</td>
-              <td>{it.title}</td>
-              <td>{it.type}</td>
-              <td>{it.category}</td>
-              <td style={{ textAlign: "right" }}>{it.amount}</td>
-              <td>
-                <button
-                  style={{
-                    background: "red",
-                    color: "white",
-                    border: "none",
-                    borderRadius: 4,
-                    cursor: "pointer",
-                    padding: "4px 8px",
-                  }}
-                  onClick={() => deleteItem(it.id)}
-                >
-                  ลบ
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* สรุปยอด */}
-      <div style={{ display: "flex", gap: 16, margin: "16px 0" }}>
-        <div>รายรับ: {income}</div>
-        <div>รายจ่าย: {expense}</div>
-        <div>คงเหลือ: {balance}</div>
-      </div>
-
-      {/* Form เพิ่มรายการ */}
-      <h2 style={{ marginTop: 32 }}>เพิ่มรายการ</h2>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+    {/* Filter */}
+    <div className="flex flex-wrap gap-4 mb-8 items-center">
+      <div className="flex flex-col">
+        <label className="text-sm">จาก:</label>
         <input
-          placeholder="ชื่อรายการ"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          type="date"
+          value={filterFrom}
+          onChange={(e) => setFilterFrom(e.target.value)}
+          className="rounded-md border border-gray-600 bg-[var(--card-bg)] px-3 py-2 min-w-[180px]"
         />
-        <select value={type} onChange={(e) => setType(e.target.value as any)}>
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-sm">ถึง:</label>
+        <input
+          type="date"
+          value={filterTo}
+          onChange={(e) => setFilterTo(e.target.value)}
+          className="rounded-md border border-gray-600 bg-[var(--card-bg)] px-3 py-2 min-w-[180px]"
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-sm">หมวด:</label>
+        <select
+          value={filterCat}
+          onChange={(e) => setFilterCat(e.target.value)}
+          className="rounded-md border border-gray-600 bg-[var(--card-bg)] px-3 py-2 min-w-[150px]"
+        >
+          {CATEGORIES.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-sm">ประเภท:</label>
+        <select
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+          className="rounded-md border border-gray-600 bg-[var(--card-bg)] px-3 py-2 min-w-[150px]"
+        >
+          <option value="all">ทั้งหมด</option>
           <option value="income">รายรับ</option>
           <option value="expense">รายจ่าย</option>
         </select>
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="food">อาหาร</option>
-          <option value="transport">เดินทาง</option>
-          <option value="bill">บิล</option>
-          <option value="other">อื่นๆ</option>
-        </select>
-        <input
-          type="number"
-          placeholder="จำนวนเงิน"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <button onClick={addItem}>บันทึก</button>
       </div>
-    </main>
-  );
+
+      <button
+        onClick={() => {
+          setFilterFrom("");
+          setFilterTo("");
+          setFilterCat("all");
+          setFilterType("all");
+        }}
+        className="rounded-md bg-blue-600 px-5 py-2 text-white font-semibold hover:bg-blue-500 self-end"
+      >
+        clear
+      </button>
+    </div>
+
+    {/* Table */}
+    <table className="w-full text-left border-collapse mb-6">
+      <thead>
+        <tr className="border-b border-gray-700 text-lg">
+          <th className="p-3">วันที่</th>
+          <th className="p-3">รายการ</th>
+          <th className="p-3">ประเภท</th>
+          <th className="p-3">หมวด</th>
+          <th className="p-3 text-right">จำนวน</th>
+          <th className="p-3 text-center">ลบ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {filtered.map((it) => (
+          <tr key={it.id} className="border-b border-gray-800 text-base">
+            <td className="p-3">{it.date}</td>
+            <td className="p-3">{it.title}</td>
+            <td className="p-3">{it.type}</td>
+            <td className="p-3">{it.category}</td>
+            <td className="p-3 text-right">{it.amount}</td>
+            <td className="p-3 text-center">
+              <button
+                onClick={() => deleteItem(it.id)}
+                className="rounded-md bg-red-600 px-4 py-2 text-white font-semibold hover:bg-red-500"
+              >
+                ลบ
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+
+    {/* Summary */}
+    <div className="flex gap-6 text-lg mb-8">
+      <div>รายรับ: {income}</div>
+      <div>รายจ่าย: {expense}</div>
+      <div>คงเหลือ: {balance}</div>
+    </div>
+
+    {/* Form */}
+    <h2 className="text-xl font-semibold mb-3">เพิ่มรายการ</h2>
+    <div className="flex flex-wrap gap-4">
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+        className="rounded-md border border-gray-600 bg-[var(--card-bg)] px-3 py-2 min-w-[180px]"
+      />
+      <input
+        placeholder="ชื่อรายการ"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="rounded-md border border-gray-600 bg-[var(--card-bg)] px-3 py-2 min-w-[200px]"
+      />
+      <select
+        value={type}
+        onChange={(e) => setType(e.target.value as any)}
+        className="rounded-md border border-gray-600 bg-[var(--card-bg)] px-3 py-2 min-w-[130px]"
+      >
+        <option value="income">รายรับ</option>
+        <option value="expense">รายจ่าย</option>
+      </select>
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        className="rounded-md border border-gray-600 bg-[var(--card-bg)] px-3 py-2 min-w-[150px]"
+      >
+        <option value="food">อาหาร</option>
+        <option value="transport">เดินทาง</option>
+        <option value="bill">บิล</option>
+        <option value="other">อื่นๆ</option>
+      </select>
+      <input
+        type="number"
+        placeholder="จำนวนเงิน"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        className="rounded-md border border-gray-600 bg-[var(--card-bg)] px-3 py-2 min-w-[150px]"
+      />
+      <button
+        onClick={addItem}
+        className="rounded-md bg-blue-600 px-5 py-2 text-white font-semibold hover:bg-blue-500"
+      >
+        บันทึก
+      </button>
+    </div>
+  </main>
+);
+
 }
