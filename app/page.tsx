@@ -17,17 +17,20 @@ export default function Home() {
   const [filterCat, setFilterCat] = useState("all");
   const [filterType, setFilterType] = useState("all");
 
+  // โหลดจาก localStorage
   useEffect(() => {
     if (typeof window === "undefined") return;
     const raw = localStorage.getItem("expense-items");
     if (raw) setItems(JSON.parse(raw));
   }, []);
 
+  // เซฟกลับเข้า localStorage
   useEffect(() => {
     if (typeof window === "undefined") return;
     localStorage.setItem("expense-items", JSON.stringify(items));
   }, [items]);
 
+  // เพิ่มรายการใหม่
   const addItem = () => {
     if (!title || !amount) return;
     const newItem = {
@@ -43,6 +46,13 @@ export default function Home() {
     setAmount("");
   };
 
+  // 🗑️ ลบรายการ
+  const deleteItem = (id: string) => {
+    const updated = items.filter((it) => it.id !== id);
+    setItems(updated);
+  };
+
+  // ฟิลเตอร์
   const filtered = useMemo(() => {
     return items.filter((it) => {
       let ok = true;
@@ -66,6 +76,7 @@ export default function Home() {
     <main style={{ maxWidth: 960, margin: "0 auto", padding: 24 }}>
       <h1>Expense Dashboard</h1>
 
+      {/* Filter */}
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         <div>
           จาก:{" "}
@@ -119,6 +130,7 @@ export default function Home() {
         </button>
       </div>
 
+      {/* ตาราง */}
       <table style={{ width: "100%", marginTop: 16 }}>
         <thead>
           <tr>
@@ -127,6 +139,7 @@ export default function Home() {
             <th>ประเภท</th>
             <th>หมวด</th>
             <th style={{ textAlign: "right" }}>จำนวน</th>
+            <th>ลบ</th>
           </tr>
         </thead>
         <tbody>
@@ -137,12 +150,34 @@ export default function Home() {
               <td>{it.type}</td>
               <td>{it.category}</td>
               <td style={{ textAlign: "right" }}>{it.amount}</td>
+              <td>
+                <button
+                  style={{
+                    background: "red",
+                    color: "white",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                    padding: "4px 8px",
+                  }}
+                  onClick={() => deleteItem(it.id)}
+                >
+                  ลบ
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      {/* Form */}
+      {/* สรุปยอด */}
+      <div style={{ display: "flex", gap: 16, margin: "16px 0" }}>
+        <div>รายรับ: {income}</div>
+        <div>รายจ่าย: {expense}</div>
+        <div>คงเหลือ: {balance}</div>
+      </div>
+
+      {/* Form เพิ่มรายการ */}
       <h2 style={{ marginTop: 32 }}>เพิ่มรายการ</h2>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
@@ -168,13 +203,6 @@ export default function Home() {
           onChange={(e) => setAmount(e.target.value)}
         />
         <button onClick={addItem}>บันทึก</button>
-
-      <div style={{ display: "flex", gap: 16, margin: "16px 0" }}>
-        <div>รายรับ: {income}</div>
-        <div>รายจ่าย: {expense}</div>
-        <div>คงเหลือ: {balance}</div>
-      </div>
-
       </div>
     </main>
   );
