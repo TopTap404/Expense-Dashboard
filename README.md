@@ -1,6 +1,4 @@
-## Getting Started
-
-Run the development server:
+รันเพื่้อทดสอบโค้ด
 ```bash
 npm run dev
 # or
@@ -10,5 +8,6 @@ pnpm dev
 # or
 bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+และเข้า [http://localhost:3000](http://localhost:3000) ใน Browser
+หรือเข้าไปทดสอบใน code ที่ Deploy ไว้
+https://expense-dashboard-eta.vercel.app/
